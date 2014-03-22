@@ -66,6 +66,7 @@
   <div class="container">
 
   <h1>Welcome to the scrolling meter demo page</h1>
+  <p><strong>This demo is meant as a proof of concept. A bit of customization needs to happen for it to suit your particular needs</strong></p>
   <div class="story">
     <h2>Introduction</h2>
 
@@ -86,6 +87,16 @@
 <h2>How it works</h2>
     <p>In order to get the most of this, I'll briefly explain how this works. Hopefully it'll allow you to be able to customize it to your needs.</p>
 
+    <h3>The HTML</h3>
+    
+    <p>Add the HTML to house the table of contents. #progress is the overall container for the entire thing. #barsContainer is what will house the progress bars.</p>
+
+    <code>
+&lt;div id="progress" style="position: fixed; left:0;">
+&nbsp;&nbsp;&lt;div&nbsp;id="barsContainer">
+&nbsp;&nbsp;&lt;/div>
+&lt;/div>
+    </code>
     <p>Note: these steps take place when the document is ready for jQuery</p>
     <ol>
       <li>First thing it does it sets up the HTML with some data- attributes. It goes through the page and looks for elements with the .story class. For each one it finds, it adds the attribute data-index="n" where n is the index of the story.</li>
