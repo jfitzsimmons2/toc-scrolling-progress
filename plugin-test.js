@@ -9,7 +9,8 @@
 		var settings = $.extend({
 			// Defaults
 			storyElem: '.story',
-			barClass: '.storybar',
+			barsContainer: '#barsContainer',
+			barClass: 'storybar',
 			headlineSelector: 'h2',
 			barColor: 'lightgray',
 			position: 'fixed'
@@ -18,17 +19,14 @@
 		var plugin = this;
 
 		setupHTML( settings.storyElem );
-		initProgressBars( settings.barClass, settings.headlineSelector );
+		initProgressBars( settings.barsContainer, settings.barClass, settings.headlineSelector );
 		makeBarsClickable( thestories() );
-		addss();
-		return this;
-
-	}
-
-	var addss = function() {
-		window.scroll(function(event) {
+		$(window).scroll(function(event) {
+			console.log('firing');
 			calcProgress();
 		});
+		return this;
+
 	}
 
 	/* Helpers */
@@ -52,7 +50,7 @@
 
 	}
 
-	var initProgressBars = function( barClass, headlineSelector ) {
+	var initProgressBars = function( barsContainer, barClass, headlineSelector ) {
 		var numStories = 4;
 	  var output = "";
 	  for (var i = 0; i < numStories; i++) {
@@ -62,9 +60,9 @@
 	    output += '</div>';
 	  };
 
-	  $("#barsContainer").append(output);
+	  $( '#barsContainer' ).append(output);
 	  jQuery('#progress').prepend($('h1').first().text());
-	  jQuery('.storybar').css('cursor', 'pointer');
+	  jQuery( '.'+barClass ).css('cursor', 'pointer');
 	  addTopLink('take me to the top'); //
 
 	}
@@ -120,10 +118,10 @@
 	  var temp;
 	  var width;
 
-	  thestories = thestories();
-
+	  s = thestories();
+	  console.log(s);
 	  if(thestories != null) {
-	    $.each(thestories, function(index, story) {
+	    $.each(s, function(index, story) {
 	      temp = scrollTop - story.top;
 	      width = temp / story.height * 100;
 	      setBarWidth(story.index, width);
