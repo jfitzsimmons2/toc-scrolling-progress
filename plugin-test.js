@@ -2,12 +2,15 @@
 
 (function ($, window, document) {
 
-	$.fn.tocProgress = function( options ) {
+	
+
+	$.fn.tocProgress = function( element, options ) {
 
 		var settings = $.extend({
 			// Defaults
 			storyElem: '.story',
-			barClass: '.storybar',
+			barsContainer: '#barsContainer',
+			barClass: 'storybar',
 			headlineSelector: 'h2',
 			barColor: 'lightgray',
 			position: 'fixed'
@@ -16,17 +19,14 @@
 		var plugin = this;
 
 		setupHTML( settings.storyElem );
-		initProgressBars( settings.barClass, settings.headlineSelector );
+		initProgressBars( settings.barsContainer, settings.barClass, settings.headlineSelector );
 		makeBarsClickable( thestories() );
-		addss();
-		return this;
-
-	}
-
-	var addss = function() {
 		$(window).scroll(function(event) {
+			console.log('firing');
 			calcProgress();
 		});
+		return this;
+
 	}
 
 	/* Helpers */
@@ -50,7 +50,7 @@
 
 	}
 
-	var initProgressBars = function( barClass, headlineSelector ) {
+	var initProgressBars = function( barsContainer, barClass, headlineSelector ) {
 		var numStories = 4;
 	  var output = "";
 	  for (var i = 0; i < numStories; i++) {
@@ -60,9 +60,9 @@
 	    output += '</div>';
 	  };
 
-	  $("#barsContainer").append(output);
+	  $( '#barsContainer' ).append(output);
 	  jQuery('#progress').prepend($('h1').first().text());
-	  jQuery('.storybar').css('cursor', 'pointer');
+	  jQuery( '.'+barClass ).css('cursor', 'pointer');
 	  addTopLink('take me to the top'); //
 
 	}
@@ -118,8 +118,10 @@
 	  var temp;
 	  var width;
 
+	  s = thestories();
+	  console.log(s);
 	  if(thestories != null) {
-	    $.each(thestories, function(index, story) {
+	    $.each(s, function(index, story) {
 	      temp = scrollTop - story.top;
 	      width = temp / story.height * 100;
 	      setBarWidth(story.index, width);
@@ -146,7 +148,7 @@
 	    });
 	  // user is on the story
 	  } else {
-	    elem.css({'font-weight': 'bold','color': 'rgb(19, 80, 39)'});
+	    elem.css({'font-weight': 'bold'});
 	    bar.css({
 	        width: width + "%",
 	    });
@@ -154,4 +156,29 @@
 
 	}
 
-}(jQuery));
+ $.fn.pluginName = function(options) {
+
+        // iterate through the DOM elements we are attaching the plugin to
+        return this.each(function() {
+
+            // if plugin has not already been attached to the element
+            if (undefined == $(this).data('tocProgress')) {
+
+                // create a new instance of the plugin
+                // pass the DOM element and the user-provided options as arguments
+                var plugin = new $.tocProgress(this, options);
+
+                // in the jQuery version of the element
+                // store a reference to the plugin object
+                // you can later access the plugin and its methods and properties like
+                // element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
+                // element.data('pluginName').settings.propertyName
+                $(this).data('tocProgress', plugin);
+
+            }
+
+        });
+
+    }
+
+})( jQuery, window, document );
