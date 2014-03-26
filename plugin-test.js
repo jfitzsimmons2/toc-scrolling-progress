@@ -1,6 +1,6 @@
 /* I'm learning how to make a jQuery plugin */
 
-(function ($, window, document) {
+(function ( $, window, document ) {
 
 	
 
@@ -9,7 +9,7 @@
 		var settings = $.extend({
 			// Defaults
 			storyElem: '.story',
-			barsContainer: '#barsContainer',
+			barsContainer: 'barsContainer',
 			barClass: 'storybar',
 			headlineSelector: 'h2',
 			barColor: 'lightgray',
@@ -17,12 +17,11 @@
 		}, options );
 
 		var plugin = this;
-
+		this.append('<div id="#' + settings.barsContainer + '"></div>');
 		setupHTML( settings.storyElem );
-		initProgressBars( settings.barsContainer, settings.barClass, settings.headlineSelector );
+		initProgressBars( settings.barsContainer, settings.barClass, settings.barColor, settings.headlineSelector );
 		makeBarsClickable( thestories() );
 		$(window).scroll(function(event) {
-			console.log('firing');
 			calcProgress();
 		});
 		return this;
@@ -47,20 +46,21 @@
 	  $( storyElem ).each(function(index, el) {
 	    $(this).attr({ 'data-index': index });
 	  });
+	  console.log($(this));
 
 	}
 
-	var initProgressBars = function( barsContainer, barClass, headlineSelector ) {
+	var initProgressBars = function( barsContainer, barClass, barColor, headlineSelector ) {
 		var numStories = 4;
 	  var output = "";
 	  for (var i = 0; i < numStories; i++) {
-	    output += '<div class="' + barClass + '" data-story="'+i+'">';
+	    output += '<div class="' + barClass + '" style="background: ' + barColor + ';" data-story="'+i+'">';
 	    output += '<p>' + getHeadline(i, headlineSelector) + '</p>';
 	    output += '<div class="bar"></div>';
 	    output += '</div>';
 	  };
 
-	  $( '#barsContainer' ).append(output);
+	  $( '#' + barsContainer ).append(output);
 	  jQuery('#progress').prepend($('h1').first().text());
 	  jQuery( '.'+barClass ).css('cursor', 'pointer');
 	  addTopLink('take me to the top'); //
@@ -119,7 +119,6 @@
 	  var width;
 
 	  s = thestories();
-	  console.log(s);
 	  if(thestories != null) {
 	    $.each(s, function(index, story) {
 	      temp = scrollTop - story.top;
