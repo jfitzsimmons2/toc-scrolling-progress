@@ -2,9 +2,11 @@
 
 (function ( $, window, document ) {
 
-  
-
   $.fn.tocProgress = function( element, options ) {
+
+    var $this = $(this);
+    console.log($this[0]);
+    var element = element; 
 
     var settings = $.extend({
       // Defaults
@@ -15,9 +17,10 @@
       barColor: 'lightgray',
       position: 'fixed'
     }, options );
-
-    var plugin = this;
-    this.append('<div id="#' + settings.barsContainer + '"></div>');
+    
+    
+    //var plugin = this;
+    $this.append('<div id="' + settings.barsContainer + '"></div>');
     setupHTML( settings.storyElem );
     initProgressBars( settings.barsContainer, settings.barClass, settings.barColor, settings.headlineSelector );
     makeBarsClickable( thestories() );
@@ -29,9 +32,8 @@
   }
 
   /* Helpers */
-  function Story() {
+  function Story() {}
 
-  }
   var numStories = function() {     
     return $('[data-index]');
   }
@@ -40,17 +42,18 @@
     return $('[data-index='+i+'] ' + elem + '').first().text();
   }
 
-
   var setupHTML = function( storyElem ) {
 
     $( storyElem ).each(function(index, el) {
       $(this).attr({ 'data-index': index });
     });
-    console.log($(this));
 
   }
 
   var initProgressBars = function( barsContainer, barClass, barColor, headlineSelector ) {
+    
+    $('#')
+
     var numStories = 4;
     var output = "";
     for (var i = 0; i < numStories; i++) {
@@ -154,30 +157,5 @@
     }
 
   }
-
- $.fn.pluginName = function(options) {
-
-        // iterate through the DOM elements we are attaching the plugin to
-        return this.each(function() {
-
-            // if plugin has not already been attached to the element
-            if (undefined == $(this).data('tocProgress')) {
-
-                // create a new instance of the plugin
-                // pass the DOM element and the user-provided options as arguments
-                var plugin = new $.tocProgress(this, options);
-
-                // in the jQuery version of the element
-                // store a reference to the plugin object
-                // you can later access the plugin and its methods and properties like
-                // element.data('pluginName').publicMethod(arg1, arg2, ... argn) or
-                // element.data('pluginName').settings.propertyName
-                $(this).data('tocProgress', plugin);
-
-            }
-
-        });
-
-    }
 
 })( jQuery, window, document );
