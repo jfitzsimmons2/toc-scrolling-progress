@@ -2,26 +2,34 @@
 
 (function ( $, window, document ) {
 
-  $.fn.tocProgress = function( element, options ) {
+  $.fn.tocProgress = function( options ) {
 
+    //reference to the element that called the plugin
     var $this = $(this);
-    console.log($this[0]);
-    var element = element; 
 
     var settings = $.extend({
       // Defaults
       storyElem: '.story',
       barsContainer: 'barsContainer',
-      barClass: 'storybar',
+      barClass: 'toc-storybar',
       headlineSelector: 'h2',
-      barColorBG: 'lightgray',
+      barColorBG: 'gray',
       barColor: 'blue',
       topText: 'Back to top'
     }, options );
     
+    $this.prepend($('h1').first().text());
     $this.append('<div id="' + settings.barsContainer + '"></div>');
+
     setupHTML( settings.storyElem );
-    initProgressBars( settings.barsContainer, settings.barClass, settings.barColorBG, settings.headlineSelector, settings.topText );
+    initProgressBars( 
+      settings.barsContainer, 
+      settings.barClass, 
+      settings.barColorBG, 
+      settings.headlineSelector, 
+      settings.topText 
+    );
+
     makeBarsClickable( thestories() );
     $(window).scroll(function(event) {
       calcProgress(settings.barColor);
@@ -42,7 +50,7 @@
   }
 
   var setupHTML = function( storyElem ) {
-
+    console.log(storyElem);
     $( storyElem ).each(function(index, el) {
       $(this).attr({ 'data-index': index });
     });
@@ -50,21 +58,18 @@
   }
 
   var initProgressBars = function( barsContainer, barClass, barColorBG, headlineSelector, topText ) {
-    
-    $('#')
 
     var numStories = 4;
     var output = "";
     for (var i = 0; i < numStories; i++) {
       output += '<div class="' + barClass + '" style="background: ' + barColorBG + ';" data-story="'+i+'">';
       output += '<p>' + getHeadline(i, headlineSelector) + '</p>';
-      output += '<div class="bar"></div>';
+      output += '<div class="toc-bar"></div>';
       output += '</div>';
     };
 
     $( '#' + barsContainer ).append(output);
-    jQuery('#progress').prepend($('h1').first().text());
-    jQuery( '.'+barClass ).css('cursor', 'pointer');
+    $( '.' + barClass ).css('cursor', 'pointer');
     addTopLink( topText ); //
 
   }
@@ -80,12 +85,9 @@
   var makeBarsClickable = function( thestories ) {
 
     $("[data-story]").each(function(index, el) {
-      var title = $(this).children('p').text();
       var scrollTopValue = thestories[index].top + 2;
       $(this).click(function() {
-        
         $('body,html').animate({'scrollTop': scrollTopValue});
-
       });
     });
 
@@ -134,7 +136,7 @@
   function setBarWidth(index, width, color) {
 
     var elem = $("[data-story=" + index + "]");
-    var bar = $("[data-story=" + index + "] .bar");
+    var bar = $("[data-story=" + index + "] .toc-bar");
     // user has scrolled passed
     if (width > 100) {
       elem.css('font-weight', 'normal');

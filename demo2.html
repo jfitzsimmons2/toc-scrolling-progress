@@ -37,6 +37,7 @@
       top: 0;
       bottom:0;
       left:0;
+      background: lightblue;
       -webkit-transition: width .2s;
       -moz-transition: width .2s;
       -ms-transition: width .2s;
@@ -52,8 +53,8 @@
 
   <h1>Welcome to the scrolling meter demo page</h1>
   <p><strong>This demo is meant as a proof of concept. A bit of customization needs to happen for it to suit your particular needs</strong></p>
-  <div class="story">
-    <h2>Introduction</h2>
+  <article class="story">
+    <h4>Introduction</h4>
 
     <p>This scrolling meter offers a table of contents for pages that have multiple pieces of content (articles, stories, etc). The background of each entry in the table of contents acts as a progress bar for how far along in the story the user is.</p>
 
@@ -67,9 +68,9 @@
 
     <p>Ideally this should be a jQuery plugin or something that takes a bunch of parameters since the usage of it will most likely not be the same for everyone. Nonetheless, here it is.</p>
 
-  </div>
-  <div class="story">
-<h2>How it works</h2>
+  </article>
+  <article class="story">
+<h4>How it works</h4>
     <p>In order to get the most of this, I'll briefly explain how this works. Hopefully it'll allow you to be able to customize it to your needs.</p>
 
     <h3>The HTML</h3>
@@ -85,16 +86,16 @@
     <p>Note: these steps take place when the document is ready for jQuery</p>
     <ol>
       <li>First thing it does it sets up the HTML with some data- attributes. It goes through the page and looks for elements with the .story class. For each one it finds, it adds the attribute data-index="n" where n is the index of the story.</li>
-      <li>Next, initProgressBars() is called which creates the HTML markup for the table of contents and the progress bars. By default, this will grab the first h2 tag within each .story to set the text. It will also grab the first h1 on the page for the title above the table of contents.</li>
+      <li>Next, initProgressBars() is called which creates the HTML markup for the table of contents and the progress bars. By default, this will grab the first h4 tag within each .story to set the text. It will also grab the first h1 on the page for the title above the table of contents.</li>
       <li>Next, we create the story objects. As an admittedly crude way of trying to ensure images were loaded, I wait 1 second before creating the story objects. Story objects contain important information about each story. It's very important that the height of the stories are correct, otherwise the entire thing won't work properly.</li>
       <li>Now its time to put all that information about the stories to use and make the table of contents entries clickable. makeBarsClickable() is called and it loops through each table of contents entry and applies the appropriate math to ensure when you click an entry, you get scrolled to the correct location on the page.</li>
       <li>Finally, we position the table of contents. This function will most likely need customization if you wish to have that table of contents somewhere other than fixed in the upper left.</li>
     </ol>
 
     
-  </div>
-  <div class="story">
-<h2>Required CSS</h2>
+  </article>
+  <article class="story">
+<h4>Required CSS</h4>
     <code>
 &lt;style type="text/css"><br>
 
@@ -140,22 +141,22 @@
 <br>
 &lt;/style>
 &nbsp;&nbsp;  </code>
-  </div>
-  <div class="story">
-<h2>Fake headlines to show</h2>
+  </article>
+  <article class="story">
+<h4>Fake headlines to show</h4>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>    
-  </div>
-  <div class="story">
-<h2>Last headline</h2>
+  </article>
+  <article class="story">
+<h4>Last headline</h4>
     <p>Simply wrap your blocks of content in HTML elements that have the class "story". Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, facilis, nihil id eos magni ex rem provident debitis consequatur deserunt.</p>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>    
-  </div>
+  </article>
   
   </div>
 
@@ -167,7 +168,14 @@
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="plugin-test.js"></script>
   <script type="text/javascript">
-  $('#progress').tocProgress();
+  $('#progress').tocProgress({
+    storyElem: "article",
+    barsContainer: "tehBars",
+    headlineSelector: "h4",
+    barColorBG: "gold",
+    barColor: "green",
+    topText: "TOP"
+  });
   </script>
 
 </body>
