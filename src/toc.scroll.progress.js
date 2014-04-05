@@ -1,9 +1,7 @@
-/* I'm learning how to make a jQuery plugin */
-
 (function ( $, window, document ) {
 
   var $this;
-  var stories;
+  var content = {};
 
   $.fn.tocProgress = function( options ) {
 
@@ -20,11 +18,12 @@
       topText: 'Back to top'
     }, options );
     
+    // First hide the table of contents
+    $this.hide();
+
     $(window).load(function() {
-
-
-
-      $this.prepend($('h1').first().text());
+      content = thestories();
+      $this.prepend('<div class="toc-title">' + $('h1').first().text() + '</div>');
       $this.append('<div id="' + settings.barsContainer + '"></div>');
 
       setupHTML( settings.storyElem );
@@ -39,6 +38,7 @@
       $(window).scroll(function(event) {
         calcProgress();
       });
+      $this.fadeIn(1000);
       return this;
     
     });
@@ -93,10 +93,10 @@
     });
   }
 
-  var makeBarsClickable = function( thestories ) {
+  var makeBarsClickable = function() {
 
     $("[data-story]").each(function(index, el) {
-      var scrollTopValue = thestories[index].top + 2;
+      var scrollTopValue = content[index].top + 2;
       $(this).click(function() {
         $('body,html').animate({'scrollTop': scrollTopValue});
       });
@@ -108,23 +108,23 @@
     return $('.nav-container').height();
   }
 
-  var thestories = function() {
+  function thestories() {
 
     var navHeight = getNavContainerHeight();
     var numberStories = numStories();
-    var stories = new Array(numberStories);
+    //var stories = new Array(numberStories);
 
 
     $('[data-index]').each(function(index, el) {
-      stories[index] = new Story();
-      stories[index].index = index;
-      stories[index].height = $(this).height() - navHeight;
-      stories[index].top = $(this).offset().top - navHeight;
-      stories[index].bottom = $(this).position().top+$(this).outerHeight(true) - navHeight;
+      content[index] = new Story();
+      content[index].index = index;
+      content[index].height = $(this).height() - navHeight;
+      content[index].top = $(this).offset().top - navHeight;
+      content[index].bottom = $(this).position().top+$(this).outerHeight(true) - navHeight;
 
     });
 
-    return stories;
+    return content;
 
   }
 
@@ -132,10 +132,9 @@
     var scrollTop = $(window).scrollTop();
     var temp;
     var width;
-
-    s = thestories();
-    if(thestories != null) {
-      $.each(s, function(index, story) {
+    
+    if(content != null) {
+      $.each(content, function(index, story) {
         temp = scrollTop - story.top;
         width = temp / story.height * 100;
         setBarWidth(story.index, width);
