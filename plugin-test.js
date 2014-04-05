@@ -142,6 +142,7 @@
       elem.css('font-weight', 'normal');
       bar.css({
           width: "100%",
+          background: color
       });
     // user is before the story
     } else if (width < 0) {
