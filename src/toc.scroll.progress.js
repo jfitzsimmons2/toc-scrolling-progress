@@ -3,6 +3,7 @@
 (function ( $, window, document ) {
 
   var $this;
+  var stories;
 
   $.fn.tocProgress = function( options ) {
 
@@ -19,23 +20,28 @@
       topText: 'Back to top'
     }, options );
     
-    $this.prepend($('h1').first().text());
-    $this.append('<div id="' + settings.barsContainer + '"></div>');
+    $(window).load(function() {
 
-    setupHTML( settings.storyElem );
-    initProgressBars( 
-      settings.barsContainer, 
-      settings.barClass,
-      settings.headlineSelector, 
-      settings.topText 
-    );
 
-    makeBarsClickable( thestories() );
-    $(window).scroll(function(event) {
-      calcProgress();
+
+      $this.prepend($('h1').first().text());
+      $this.append('<div id="' + settings.barsContainer + '"></div>');
+
+      setupHTML( settings.storyElem );
+      initProgressBars( 
+        settings.barsContainer, 
+        settings.barClass,
+        settings.headlineSelector, 
+        settings.topText 
+      );
+
+      makeBarsClickable( thestories() );
+      $(window).scroll(function(event) {
+        calcProgress();
+      });
+      return this;
+    
     });
-    return this;
-
   }
 
   /* Helpers */
