@@ -2,10 +2,13 @@
 
 (function ( $, window, document ) {
 
+  var $this;
+
   $.fn.tocProgress = function( options ) {
 
     //reference to the element that called the plugin
-    var $this = $(this);
+    $this = $(this);
+    console.log($this);
 
     var settings = $.extend({
       // Defaults
@@ -13,8 +16,6 @@
       barsContainer: 'barsContainer',
       barClass: 'toc-storybar',
       headlineSelector: 'h2',
-      barColorBG: 'gray',
-      barColor: 'blue',
       topText: 'Back to top'
     }, options );
     
@@ -24,15 +25,14 @@
     setupHTML( settings.storyElem );
     initProgressBars( 
       settings.barsContainer, 
-      settings.barClass, 
-      settings.barColorBG, 
+      settings.barClass,
       settings.headlineSelector, 
       settings.topText 
     );
 
     makeBarsClickable( thestories() );
     $(window).scroll(function(event) {
-      calcProgress(settings.barColor);
+      calcProgress();
     });
     return this;
 
@@ -41,9 +41,13 @@
   /* Helpers */
   function Story() {}
 
-  var numStories = function() {     
-    return $('[data-index]');
-  }
+  function numStories() {
+      var i = 0;
+      $('[data-index]').each(function() {
+        i++;
+      });
+      return i;
+    }
 
   var getHeadline = function( i,elem ) {
     return $('[data-index='+i+'] ' + elem + '').first().text();
@@ -57,12 +61,11 @@
 
   }
 
-  var initProgressBars = function( barsContainer, barClass, barColorBG, headlineSelector, topText ) {
+  var initProgressBars = function( barsContainer, barClass, headlineSelector, topText ) {
 
-    var numStories = 4;
     var output = "";
-    for (var i = 0; i < numStories; i++) {
-      output += '<div class="' + barClass + '" style="background: ' + barColorBG + ';" data-story="'+i+'">';
+    for (var i = 0; i < numStories(); i++) {
+      output += '<div class="' + barClass + '";" data-story="'+i+'">';
       output += '<p>' + getHeadline(i, headlineSelector) + '</p>';
       output += '<div class="toc-bar"></div>';
       output += '</div>';
@@ -70,14 +73,16 @@
 
     $( '#' + barsContainer ).append(output);
     $( '.' + barClass ).css('cursor', 'pointer');
+
     addTopLink( topText ); //
 
   }
 
-  var addTopLink = function( wording ) {
-    $("#progress").append('<div class="top">' + wording + '</div>');
-    $('.top').css('cursor','pointer');
-    $('.top').click(function(event) {
+  function addTopLink( wording ) {
+
+    $this.append('<div class="toc-top">' + wording + '</div>');
+    $('.toc-top').css('cursor','pointer');
+    $('.toc-top').click(function(event) {
       $('body,html').animate({ 'scrollTop': 0 });
     });
   }
@@ -117,7 +122,7 @@
 
   }
 
-  var calcProgress = function(color) {
+  var calcProgress = function() {
     var scrollTop = $(window).scrollTop();
     var temp;
     var width;
@@ -127,7 +132,7 @@
       $.each(s, function(index, story) {
         temp = scrollTop - story.top;
         width = temp / story.height * 100;
-        setBarWidth(story.index, width, color);
+        setBarWidth(story.index, width);
       });
 
     }
