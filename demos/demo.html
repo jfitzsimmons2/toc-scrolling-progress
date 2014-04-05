@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scrolling Meter Demo | Joseph Fitzsimmons</title>
+  <style type="text/css">
+
+    *,*:before,*:after {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 350px;
+      margin: auto;
+    }
+
+    .toc-storybar {
+      position: relative;
+      border-top: 1px solid gray;
+    }
+
+    .toc-storybar:last-child {
+      border-bottom: 1px solid gray;
+      margin-bottom: .25em;
+    }
+
+    .toc-storybar p {
+      position: relative;
+      padding: 5%;
+      margin-bottom: 0;
+      margin-top: 0;
+      z-index: 100;
+    }
+
+    .toc-bar {
+      position: absolute;
+      top: 0;
+      bottom:0;
+      left:0;
+      -webkit-transition: width .2s;
+      -moz-transition: width .2s;
+      -ms-transition: width .2s;
+      -o-transition: width .2s;
+      transition: width .2s;
+    }
+  </style>
+</head>
+<body>
+    <div id="progress" style="position: fixed; left:0;"></div>
+
+  <div class="container">
+
+  <h1>Welcome to the scrolling meter demo page</h1>
+  <p><strong>This demo is meant as a proof of concept. A bit of customization needs to happen for it to suit your particular needs</strong></p>
+  <div class="story">
+    <h2>Introduction</h2>
+
+    <p>This scrolling meter offers a table of contents for pages that have multiple pieces of content (articles, stories, etc). The background of each entry in the table of contents acts as a progress bar for how far along in the story the user is.</p>
+
+    <p>This originally was written over a few days as <a href="http://www.oswego.edu/about/leadership/annual-report-2013/">part of a larger project</a>. I'm sure there are better ways of handling the functionality, but this worked well for what I needed.</p>
+
+    <p>It was created because for the project I mentioned above because we had very large scrolling pages consisting of 3-5 stories that made up a section. We wanted to make something that felt fun to use and kept the user engaged. Even if the user didn't read the whole article, they could quickly click on a spot of the table of contents and be taken to a particular story of interest. Or they could just scroll madly up and down the page watching the bars move, looking at photos and reading callout quotes. Someone noticed the functionality of this scrolling meter on <a href="http://www.thedailybeast.com">The Daily Beast</a> so we decided to make our own.</p>
+
+    <p>I'm putting the project up on github so feel free to take it, use it, change it, make it better, or whatever you want to do with it. If you feel inclined just give some credit to <a href="http://www.josephfitzsimmons.com">me</a> and <a href="http://www.oswego.edu">SUNY Oswego</a>. :)
+
+    <p>This project really only works well when the stories or articles are over a screen length long on your average monitor. Besides, why would you want a scrolling meter if the user can already see the end of the article? I also wouldn't recommend using it with over 5 articles on a single page because of performance issues.</p>
+
+    <p>Ideally this should be a jQuery plugin or something that takes a bunch of parameters since the usage of it will most likely not be the same for everyone. Nonetheless, here it is.</p>
+
+  </div>
+  <div class="story">
+<h2>How it works</h2>
+    <p>In order to get the most of this, I'll briefly explain how this works. Hopefully it'll allow you to be able to customize it to your needs.</p>
+
+    <h3>The HTML</h3>
+    
+    <p>Add the HTML to house the table of contents. #progress is the overall container for the entire thing. #barsContainer is what will house the progress bars.</p>
+
+    <code>
+&lt;div id="progress" style="position: fixed; left:0;">
+&nbsp;&nbsp;&lt;div&nbsp;id="barsContainer">
+&nbsp;&nbsp;&lt;/div>
+&lt;/div>
+    </code>
+    <p>Note: these steps take place when the document is ready for jQuery</p>
+    <ol>
+      <li>First thing it does it sets up the HTML with some data- attributes. It goes through the page and looks for elements with the .story class. For each one it finds, it adds the attribute data-index="n" where n is the index of the story.</li>
+      <li>Next, initProgressBars() is called which creates the HTML markup for the table of contents and the progress bars. By default, this will grab the first h2 tag within each .story to set the text. It will also grab the first h1 on the page for the title above the table of contents.</li>
+      <li>Next, we create the story objects. As an admittedly crude way of trying to ensure images were loaded, I wait 1 second before creating the story objects. Story objects contain important information about each story. It's very important that the height of the stories are correct, otherwise the entire thing won't work properly.</li>
+      <li>Now its time to put all that information about the stories to use and make the table of contents entries clickable. makeBarsClickable() is called and it loops through each table of contents entry and applies the appropriate math to ensure when you click an entry, you get scrolled to the correct location on the page.</li>
+      <li>Finally, we position the table of contents. This function will most likely need customization if you wish to have that table of contents somewhere other than fixed in the upper left.</li>
+    </ol>
+
+    
+  </div>
+  <div class="story">
+<h2>Required CSS</h2>
+    <code>
+&lt;style type="text/css"><br>
+
+&nbsp;&nbsp;*,*:before,*:after&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;box-sizing:&nbsp;border-box;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;.container&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;350px;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;margin:&nbsp;auto;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;.storybar&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;position:&nbsp;relative;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;border-top:&nbsp;1px&nbsp;solid&nbsp;gray;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;.storybar:last-child&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;border-bottom:&nbsp;1px&nbsp;solid&nbsp;gray;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;margin-bottom:&nbsp;.25em;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;.storybar&nbsp;p&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;position:&nbsp;relative;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;padding:&nbsp;5%;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;margin-bottom:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;margin-top:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;z-index:&nbsp;100;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;.bar&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;position:&nbsp;absolute;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;top:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bottom:0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;left:0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;aliceblue;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-webkit-transition: width .2s;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-moz-transition: width .2s;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-ms-transition: width .2s;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-o-transition: width .2s;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;transition: width .2s;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&lt;/style>
+&nbsp;&nbsp;  </code>
+  </div>
+  <div class="story">
+<h2>Fake headlines to show</h2>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>    
+  </div>
+  <div class="story">
+<h2>Last headline</h2>
+    <p>Simply wrap your blocks of content in HTML elements that have the class "story". Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, facilis, nihil id eos magni ex rem provident debitis consequatur deserunt.</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, consequatur delectus aliquam quasi consequuntur voluptatum provident ducimus sequi commodi illo iure consectetur quaerat sunt error aut ut deleniti labore alias deserunt sapiente ratione est in accusantium ex facilis placeat assumenda. Dolorem, voluptas, culpa, ratione quo facere cumque aperiam eligendi qui et nobis quos eum iure unde incidunt nisi omnis maxime saepe magnam animi est placeat consectetur ducimus excepturi. Quisquam suscipit at sed aut eum in tempore commodi aperiam vero! Tempore, dolor, in maxime consequatur omnis cumque quisquam commodi aspernatur neque optio atque aliquid expedita sunt error maiores amet ad tenetur?</p>    
+  </div>
+  
+  </div>
+
+<footer style="height: 500px; font-size: 4em; margin-top: 200px;">
+<p style="text-align: center;"><a href="scroll-meter.js">Download</a></p>
+<p>Then, ideally you'd want some sort of footer or spacing at the bottom to ensure that there's enough room to scroll past the article.</p>
+</footer>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="plugin-test.js"></script>
+  <script type="text/javascript">
+  $('#progress').tocProgress();
+  </script>
+
+</body>
+</html>
