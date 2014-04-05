@@ -14,18 +14,17 @@
       barsContainer: 'barsContainer',
       barClass: 'storybar',
       headlineSelector: 'h2',
-      barColor: 'lightgray',
-      position: 'fixed'
+      barColorBG: 'lightgray',
+      barColor: 'blue',
+      topText: 'Back to top'
     }, options );
     
-    
-    //var plugin = this;
     $this.append('<div id="' + settings.barsContainer + '"></div>');
     setupHTML( settings.storyElem );
-    initProgressBars( settings.barsContainer, settings.barClass, settings.barColor, settings.headlineSelector );
+    initProgressBars( settings.barsContainer, settings.barClass, settings.barColorBG, settings.headlineSelector, settings.topText );
     makeBarsClickable( thestories() );
     $(window).scroll(function(event) {
-      calcProgress();
+      calcProgress(settings.barColor);
     });
     return this;
 
@@ -50,14 +49,14 @@
 
   }
 
-  var initProgressBars = function( barsContainer, barClass, barColor, headlineSelector ) {
+  var initProgressBars = function( barsContainer, barClass, barColorBG, headlineSelector, topText ) {
     
     $('#')
 
     var numStories = 4;
     var output = "";
     for (var i = 0; i < numStories; i++) {
-      output += '<div class="' + barClass + '" style="background: ' + barColor + ';" data-story="'+i+'">';
+      output += '<div class="' + barClass + '" style="background: ' + barColorBG + ';" data-story="'+i+'">';
       output += '<p>' + getHeadline(i, headlineSelector) + '</p>';
       output += '<div class="bar"></div>';
       output += '</div>';
@@ -66,7 +65,7 @@
     $( '#' + barsContainer ).append(output);
     jQuery('#progress').prepend($('h1').first().text());
     jQuery( '.'+barClass ).css('cursor', 'pointer');
-    addTopLink('take me to the top'); //
+    addTopLink( topText ); //
 
   }
 
@@ -116,7 +115,7 @@
 
   }
 
-  var calcProgress = function() {
+  var calcProgress = function(color) {
     var scrollTop = $(window).scrollTop();
     var temp;
     var width;
@@ -126,13 +125,13 @@
       $.each(s, function(index, story) {
         temp = scrollTop - story.top;
         width = temp / story.height * 100;
-        setBarWidth(story.index, width);
+        setBarWidth(story.index, width, color);
       });
 
     }
   }
 
-  function setBarWidth(index, width) {
+  function setBarWidth(index, width, color) {
 
     var elem = $("[data-story=" + index + "]");
     var bar = $("[data-story=" + index + "] .bar");
@@ -153,6 +152,7 @@
       elem.css({'font-weight': 'bold'});
       bar.css({
           width: width + "%",
+          background: color
       });
     }
 
