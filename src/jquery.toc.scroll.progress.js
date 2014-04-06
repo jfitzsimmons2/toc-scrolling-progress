@@ -52,7 +52,7 @@
         settings.topText 
       );
       content = thestories();
-      console.log(content);
+      //console.log(content);
       makeBarsClickable();
       $(window).scroll(function(event) {
         calcProgress();
@@ -79,7 +79,7 @@
   }
 
   var setupHTML = function( storyElem ) {
-    console.log(storyElem);
+    //console.log(storyElem);
     $( storyElem ).each(function(index, el) {
       $(this).attr({ 'data-index': index });
     });
