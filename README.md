@@ -19,7 +19,7 @@ The plugin is super easy to setup. First create the HTML element that'll be the 
 <div id="progress"></div>
 ````
 
-Load the jQuery and the plugin.
+Load jQuery and the plugin. Then call the plugin.
 
 ````html
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
