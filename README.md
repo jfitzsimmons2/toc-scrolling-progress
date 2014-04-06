@@ -3,8 +3,8 @@
 ###Create a table of contents with scrolling progress###
 
 View the demos
-1. [Demo 1](http://jfitzsimmons2.github.io/toc-scrolling-progress/demos/alice/)
-2. [Demo 2](http://jfitzsimmons2.github.io/toc-scrolling-progress/demos/garden/book.html)
+- [Demo 1](http://jfitzsimmons2.github.io/toc-scrolling-progress/demos/alice/)
+- [Demo 2](http://jfitzsimmons2.github.io/toc-scrolling-progress/demos/garden/book.html)
 
 Perfect for:
 - long scrolling pages with multiple sections
