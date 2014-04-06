@@ -1,28 +1,46 @@
-(function ( $, window, document ) {
+;(function ( $, window, document ) {
 
   var $this;
   var content = {};
 
-  $.fn.tocProgress = function( options ) {
-
-    //reference to the element that called the plugin
-    $this = $(this);
-    console.log($this);
-
-    var settings = $.extend({
+  var to;
+  var settings = {
       // Defaults
+      offsetElem: '.nav-container',
       storyElem: '.story',
       barsContainer: 'barsContainer',
       barClass: 'toc-storybar',
       headlineSelector: 'h2',
       topText: 'Back to top'
-    }, options );
+    }
+
+  $.fn.tocProgress = function( options ) {
+
+    //reference to the element that called the plugin
+    $this = $(this);
+    //console.log(this);
+
+    settings = $.extend( settings, options );
+    
     
     // First hide the table of contents
     $this.hide();
+    
+    $(window).resize(function(event) {
+      // Wait 500ms after resizing window to reset things
+      if (to != null) {
+        clearTimeout(to);
+      }
+      to = window.setTimeout(function() {
+        delete content;
+        content = thestories();
+        makeBarsClickable();
+      }, 500);
 
-    $(window).load(function() {
-      content = thestories();
+    });
+
+    $(window).load(function() {      
+
       $this.prepend('<div class="toc-title">' + $('h1').first().text() + '</div>');
       $this.append('<div id="' + settings.barsContainer + '"></div>');
 
@@ -33,8 +51,9 @@
         settings.headlineSelector, 
         settings.topText 
       );
-
-      makeBarsClickable( thestories() );
+      content = thestories();
+      console.log(content);
+      makeBarsClickable();
       $(window).scroll(function(event) {
         calcProgress();
       });
@@ -93,10 +112,11 @@
     });
   }
 
-  var makeBarsClickable = function() {
+  function makeBarsClickable() {
 
     $("[data-story]").each(function(index, el) {
       var scrollTopValue = content[index].top + 2;
+      $(this).off('click'); // Remove any click events before assigning another
       $(this).click(function() {
         $('body,html').animate({'scrollTop': scrollTopValue});
       });
@@ -104,17 +124,15 @@
 
   }
 
-  var getNavContainerHeight = function() {
-    return $('.nav-container').height();
+  function getNavContainerHeight(offsetElem) {
+    return $(offsetElem).height();
   }
 
   function thestories() {
 
-    var navHeight = getNavContainerHeight();
+    var navHeight = getNavContainerHeight(settings.offsetElem);
     var numberStories = numStories();
-    //var stories = new Array(numberStories);
-
-
+    
     $('[data-index]').each(function(index, el) {
       content[index] = new Story();
       content[index].index = index;
@@ -123,12 +141,12 @@
       content[index].bottom = $(this).position().top+$(this).outerHeight(true) - navHeight;
 
     });
-
+    
     return content;
 
   }
 
-  var calcProgress = function() {
+  function calcProgress() {
     var scrollTop = $(window).scrollTop();
     var temp;
     var width;
