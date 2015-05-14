@@ -21,11 +21,11 @@
     //console.log(this);
 
     settings = $.extend( settings, options );
-    
-    
+
+
     // First hide the table of contents
     $this.hide();
-    
+
     $(window).resize(function(event) {
       // Wait 500ms after resizing window to reset things
       if (to != null) {
@@ -33,38 +33,43 @@
       }
       to = window.setTimeout(function() {
         delete content;
-        content = thestories();
+        content = process();
         makeBarsClickable();
       }, 500);
 
     });
 
-    $(window).load(function() {      
+    $(window).load(function() {
 
       $this.prepend('<div class="toc-title">' + $('h1').first().text() + '</div>');
       $this.append('<div id="' + settings.barsContainer + '"></div>');
 
       setupHTML( settings.storyElem );
-      initProgressBars( 
-        settings.barsContainer, 
+      initProgressBars(
+        settings.barsContainer,
         settings.barClass,
-        settings.headlineSelector, 
-        settings.topText 
+        settings.headlineSelector,
+        settings.topText
       );
-      content = thestories();
-      console.log(content);
+      content = process();
+      //console.log(content);
       makeBarsClickable();
       $(window).scroll(function(event) {
         calcProgress();
       });
       $this.fadeIn(1000);
       return this;
-    
+
     });
   }
 
   /* Helpers */
-  function Story() {}
+  function Story(index, height, top, bottom) {
+      this.index = index;
+      this.height = height;
+      this.top = top;
+      this.bottom = bottom;
+  }
 
   function numStories() {
       var i = 0;
@@ -128,20 +133,21 @@
     return $(offsetElem).height();
   }
 
-  function thestories() {
+  function process() {
 
     var navHeight = getNavContainerHeight(settings.offsetElem);
     var numberStories = numStories();
-    
+
     $('[data-index]').each(function(index, el) {
-      content[index] = new Story();
-      content[index].index = index;
-      content[index].height = $(this).height() - navHeight;
-      content[index].top = $(this).offset().top - navHeight;
-      content[index].bottom = $(this).position().top+$(this).outerHeight(true) - navHeight;
+      content[index] = new Story(
+        index,
+        $(this).height() - navHeight,
+        $(this).offset().top - navHeight,
+        $(this).position().top + $(this).outerHeight(true) - navHeight
+        );
 
     });
-    
+
     return content;
 
   }
@@ -150,7 +156,7 @@
     var scrollTop = $(window).scrollTop();
     var temp;
     var width;
-    
+
     if(content != null) {
       $.each(content, function(index, story) {
         temp = scrollTop - story.top;
